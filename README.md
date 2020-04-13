@@ -6,28 +6,28 @@ Here, base on the model NIMA<sup>[[1]](#References)</sup> (Neural Image Assessme
 
 ## Model Networks
 
-The ability of NIMA model to assess image quality comes from the innovation of training mission and the designing of loss function. It uses EMD<sup>[[1]](#References)</sup> (Earth Mover's Distance) loss function to optimize the predicting ability of scoring distribution, rather than simply treat it as a multi-classification mission.
+The ability of NIMA model to assess image quality depends on the innovation of training mission and the designing of loss function. It uses EMD<sup>[[1]](#References)</sup> (Earth Mover's Distance) loss function to optimize the predicting ability of score distribution, rather than simply solve a multi-classification problem.
 
-As image scoring distribution is what NIMA learns, the model use AVA<sup>[[3]](#References)</sup> (A Large-Scale Database for Aesthetic Visual Analysis) dataset, which contains a lot of aesthetic images and 1 to 10 user voting results, as its training samples.
+As NIMA learns the image score distribution, it use AVA<sup>[[3]](#References)</sup> (A Large-Scale Database for Aesthetic Visual Analysis) dataset, which contains a lot of aesthetic images and 1 to 10 user voting results, as its training samples.
 
-Through the design of the training samples and loss function, NIMA can successfully percept the image quality in general. But if we also want it has better ranking ability, we have to make some optimization on NIMA while training. Therefore, here comes Siamese NIMA. It utilize the advantages of siamese networks to futher optimize NIMA networks, so that the model would obtain a certain ability of fine-grained ranking.
+Through the design of the training samples and loss function, NIMA can successfully percept the image quality in general. But if we also want it has better ranking ability, we have to make some optimization on NIMA model while training. Therefore, here comes Siamese NIMA. It utilize the advantages of siamese networks to futher optimize NIMA networks, so that the model would obtain the ability of fine-grained ranking.
 
-Structure of the Siamese NIMA networks is shown bellow.
+Structure of the Siamese NIMA is shown bellow.
 ![Siamese Nima](./assets/figures/siamese_nima.svg)
 
-While training the model, we first use the AVA dataset to bucket the image mean score, then create a list of pairs of samples and labels. After taht, we can reuse the NIMA network and share its weights across the siamese networks, in order to minimize the loss of model ranking distance.
+While training the model, we first use the AVA dataset to bucket the image mean score, then create a list of pairs of samples and labels. After that, we can reuse the NIMA network and share its weights across the siamese networks, in order to minimize the loss of model ranking distance.
 
 ## Pre-trained Weights
 
 **TL;DR**: pre-trained weights have been uploaded on [Releases](https://github.com/ryanfwy/image-quality/releases), please download the corresponding weight file according to different purposes and place it into the directory `./assets/weights/` (optional). 
 
-The weight file of InceptionResNetV2-based NIMA model is provided by [titu1994](https://github.com/titu1994/neural-image-assessment/releases/tag/v0.5)<sup>[[4]](#References)</sup>. Making use of this pre-trained model weight as a part of Siamese NIMA, we can simplify the processes of NIMA model fine-tuning.
+The weight file of InceptionResNetV2-based NIMA model is provided by [titu1994](https://github.com/titu1994/neural-image-assessment/releases/tag/v0.5)<sup>[[4]](#References)</sup>. Making use of this pre-trained model weight as a part of Siamese NIMA, we can simplify the processes of model fine-tuning.
 
 Based on the pre-trained weight of NIMA model, we freeze the bottom layers to retain the model's general ability of image expression and unfreeze the rest, in order to optimize the ablity of model fine-grained ranking. In this way, we can obtain a good model even the training dataset is not big enough. By default, the freezing layer is set as `layer_to_freeze=618`.
 
 After training, we can take apart NIMA from Siamese NIMA and save its weight directly, so that when we are trying to predict a batch of images with the model, we can only build a single NIMA model and load its weight.
 
-> If we really want to re-train a new model with Siamese NIMA, we can leave `nima_weight_path` empty while training. However, in this way the model won't optimize the EMD loss function. In other words, the shared part of network is a pure InceptionResNetV2 model instead of NIMA model, which lacks the perception of image quality assessment. In this cases, we'd better first train a new NIMA model and pass the file path of the weight into the training procedure, then continually fine-tune it with Siamese NIMA.
+> If we really want to re-train a new model with Siamese NIMA, we can leave `nima_weight_path` empty while training. However, in this way the model won't optimize the EMD loss function. In other words, the shared part of the network is a pure InceptionResNetV2 model instead of NIMA model, which lacks the perception of image quality assessment. In this cases, we'd better first train a new NIMA model and pass the file path of the weight into the training procedure, then continually fine-tune it with Siamese NIMA.
 
 ## Results and Comparision
 
@@ -52,7 +52,7 @@ Model training and predicting are done on AWS EC2 server. Due to the complexity 
 
 ### 1. Install Python 3
 
-Different OS have different installation guidance. For details, please refer to https://www.python.org/downloads . For recommendation, the version of Python should not lower than `3.6`.
+Different OS have different installation guidance. For details, please refer to https://www.python.org/downloads . For recommendation, the version of Python should not be lower than `3.6`.
 
 Check existing version or check whether the installation is succeeded or not, run:
 
@@ -151,7 +151,7 @@ file_name label
 ...
 ```
 
-If additional data is used for verification during training, image directory and data file can be prepared as same as described above, and pass it to argument `val_raw` while invoking the `train()` method.
+If additional data is used for training verification, image directory and data file can be prepared as same as the method described above, and pass the result to argument `val_raw` while invoking the `train()` method.
 
 For training script, please see [demo_train.py](./demo_train.py). For more training arguments, please refer to [fit_generator](https://keras.io/models/model/#fit_generator).
 
