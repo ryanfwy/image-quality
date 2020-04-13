@@ -21,13 +21,13 @@ Siamese NIMA 网络结构如下图所示。
 
 **TL;DR**：预训练权重均上传至 [Releases](https://github.com/ryanfwy/image-quality/releases)，请根据不同目的下载相应权重并置于 `./assets/weights/` 目录（非必须）。
 
-基于 InceptionResnetV2 的 NIMA 模型权重由 [titu1994](https://github.com/titu1994/neural-image-assessment/releases/tag/v0.5) 提供<sup>[[4]](#参考)</sup>，使用预训练模型权重作为 Siamese NIMA 的权值共享网络部分，可以免去重新训练 NIMA 模型过程，直接利用孪生网络结构进行微调。
+基于 InceptionResNetV2 的 NIMA 模型权重由 [titu1994](https://github.com/titu1994/neural-image-assessment/releases/tag/v0.5) 提供<sup>[[4]](#参考)</sup>，使用预训练模型权重作为 Siamese NIMA 的权值共享网络部分，可以免去重新训练 NIMA 模型过程，直接利用孪生网络结构进行微调。
 
 在预训练 NIMA 模型权重基础上，冻结浅层网络来保留模型对图像的通用表达能力，使用孪生网络结构微调和优化深层网络参数，从而增强模型对图像质量评价的区分度，且在训练样本不多的情况下也能获得较好的训练效果。默认冻结层设置为 `layer_to_freeze=618`。
 
 训练后将 NIMA 模型从 Siamese NIMA 模型结构中分离，单独保存 NIMA 模型部分的权重，即可在预测时直接使用 NIMA 模型结构和微调后的权重，而非孪生结构的 Siamese NIMA。
 
-> 如果希望以孪生网络结构重新训练模型，则可以在训练时去除 `nima_weight_path` 参数。但此时模型没有使用 NIMA 模型的 EMD 损失进行优化，所以严格意义上共享网络是一个纯 InceptionResnetV2 模型而非 NIMA 模型，缺乏对图像质量评价的感知能力。或者读者可以自己额外训练 NIMA 模型权重，再将训练好的权重文件路径传递到训练中，接着利用孪生网络结构进行微调。
+> 如果希望以孪生网络结构重新训练模型，则可以在训练时去除 `nima_weight_path` 参数。但此时模型没有使用 NIMA 模型的 EMD 损失进行优化，所以严格意义上共享网络是一个纯 InceptionResNetV2 模型而非 NIMA 模型，缺乏对图像质量评价的感知能力。或者读者可以自己额外训练 NIMA 模型权重，再将训练好的权重文件路径传递到训练中，接着利用孪生网络结构进行微调。
 
 ## 结果对比
 

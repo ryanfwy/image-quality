@@ -21,13 +21,13 @@ While training the model, we first use the AVA dataset to bucket the image mean 
 
 **TL;DR**: pre-trained weights have been uploaded on [Releases](https://github.com/ryanfwy/image-quality/releases), please download the corresponding weight file according to different purposes and place it into the directory `./assets/weights/` (optional). 
 
-The weight file of InceptionResnetV2-based NIMA model is provided by [titu1994](https://github.com/titu1994/neural-image-assessment/releases/tag/v0.5)<sup>[[4]](#References)</sup>. Making use of this pre-trained model weight as a part of Siamese NIMA, we can simplify the processes of NIMA model fine-tuning.
+The weight file of InceptionResNetV2-based NIMA model is provided by [titu1994](https://github.com/titu1994/neural-image-assessment/releases/tag/v0.5)<sup>[[4]](#References)</sup>. Making use of this pre-trained model weight as a part of Siamese NIMA, we can simplify the processes of NIMA model fine-tuning.
 
 Based on the pre-trained weight of NIMA model, we freeze the bottom layers to retain the model's general ability of image expression and unfreeze the rest, in order to optimize the ablity of model fine-grained ranking. In this way, we can obtain a good model even the training dataset is not big enough. By default, the freezing layer is set as `layer_to_freeze=618`.
 
 After training, we can take apart NIMA from Siamese NIMA and save its weight directly, so that when we are trying to predict a batch of images with the model, we can only build a single NIMA model and load its weight.
 
-> If we really want to re-train a new model with Siamese NIMA, we can leave `nima_weight_path` empty while training. However, in this way the model won't optimize the EMD loss function. In other words, the shared part of network is a pure InceptionResnetV2 model instead of NIMA model, which lacks the perception of image quality assessment. In this cases, we'd better first train a new NIMA model and pass the file path of the weight into the training procedure, then continually fine-tune it with Siamese NIMA.
+> If we really want to re-train a new model with Siamese NIMA, we can leave `nima_weight_path` empty while training. However, in this way the model won't optimize the EMD loss function. In other words, the shared part of network is a pure InceptionResNetV2 model instead of NIMA model, which lacks the perception of image quality assessment. In this cases, we'd better first train a new NIMA model and pass the file path of the weight into the training procedure, then continually fine-tune it with Siamese NIMA.
 
 ## Results and Comparision
 
