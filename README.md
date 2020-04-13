@@ -1,5 +1,7 @@
 # Image Quality: Siamese NIMA
 
+📖 中文版本：[README](./README_zh.md)
+
 Here, base on the model NIMA<sup>[[1]](#References)</sup> (Neural Image Assessment), proposed by Google, and the Siamese Network<sup>[[2]](#References)</sup>, a **Siamese NIMA** neural network is used to optimize the ablity of model fine-grained ranking.
 
 ## Model Networks
@@ -19,7 +21,7 @@ While training the model, we first use the AVA dataset to bucket the image mean 
 
 **TL;DR**: pre-trained weights have been uploaded on [Releases](https://github.com/ryanfwy/image-quality/releases), please download the corresponding weight file according to different purposes and place it into the directory `./assets/weights/` (optional). 
 
-The weight file of InceptionResnetV2-based NIMA model is provided by [titu1994](https://github.com/titu1994/neural-image-assessment/releases/tag/v0.5)<sup>[[4]](#参考)</sup>. Making use of this pre-trained model weight as a part of Siamese NIMA, we can simplify the processes of NIMA model fine-tuning.
+The weight file of InceptionResnetV2-based NIMA model is provided by [titu1994](https://github.com/titu1994/neural-image-assessment/releases/tag/v0.5)<sup>[[4]](#References)</sup>. Making use of this pre-trained model weight as a part of Siamese NIMA, we can simplify the processes of NIMA model fine-tuning.
 
 Based on the pre-trained weight of NIMA model, we freeze the bottom layers to retain the model's general ability of image expression and unfreeze the rest, in order to optimize the ablity of model fine-grained ranking. In this way, we can obtain a good model even the training dataset is not big enough. By default, the freezing layer is set as `layer_to_freeze=618`.
 
@@ -36,7 +38,7 @@ Todo.
 Model training and predicting are done on AWS EC2 server. Due to the complexity of whether the physical machine has a GPU and the GPU version, the following major environments are listed bellow for reference. For the deployment guidance of the major environments, please refer to [Deployment of Running Environment](#Deployment-of-Running-Environment).
 
 - Physical environment：
-    - CPU version ：4 * Intel(R) Xeon(R) CPU E5-2686 @ 2.30GHz
+    - CPU version ：4 * Intel(R) Xeon(R) CPU E5-2686 @ 2.30GHz
     - CPU memory：64GB
     - GPU version：1 * Nvidia Tesla V100
     - GPU memory：16GB
@@ -196,7 +198,7 @@ print(results)
 [1] NIMA: Neural Image Assessment. [[Paper]](https://arxiv.org/abs/1709.05424) [[Repo]](https://github.com/titu1994/neural-image-assessment)  
 [2] Siamese Network. [[Demo]](https://github.com/keras-team/keras/blob/master/examples/mnist_siamese.py)  
 [3] AVA: A Large-Scale Database for Aesthetic Visual Analysis. [[Refer]](https://www.dpchallenge.com/) [[Repo]](https://github.com/mtobeiyf/ava_downloader)  
-[4] neural-image-assessment. [[Reop]](https://github.com/titu1994/neural-image-assessment)
+[4] neural-image-assessment. [[Repo]](https://github.com/titu1994/neural-image-assessment)
 
 ## License
 

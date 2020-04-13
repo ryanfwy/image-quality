@@ -1,5 +1,7 @@
 # Image Quality: Siamese NIMA
 
+📖 English Version: [README](./README.md)
+
 这里，基于谷歌提出的 NIMA<sup>[[1]](#参考)</sup>（Neural Image Assessment）模型，结合 Siamese Network<sup>[[2]](#参考)</sup>（孪生网络结构），组成 **Siamese NIMA 网络模型**，优化模型对图像质量评价的区分度（即精排能力）。
 
 ## 网络结构
@@ -36,7 +38,7 @@ Todo。
 模型训练和预测均在 AWS EC2 服务器上执行。由于物理机是否带有 GPU 与带 GPU 的型号情况复杂，因此列举以下关键运行环境以供参考。关于主要运行环境的部署说明，请参考[运行环境配置](#运行环境配置)。
 
 - 物理环境：
-    - CPU 型号 ：4 * Intel(R) Xeon(R) CPU E5-2686 @ 2.30GHz
+    - CPU 型号 ：4 * Intel(R) Xeon(R) CPU E5-2686 @ 2.30GHz
     - CPU 内存：64GB
     - GPU 型号：1 * Nvidia Tesla V100
     - GPU 内存：16GB
@@ -196,7 +198,7 @@ print(results)
 [1] NIMA: Neural Image Assessment. [[Paper]](https://arxiv.org/abs/1709.05424) [[Repo]](https://github.com/titu1994/neural-image-assessment)  
 [2] Siamese Network. [[Demo]](https://github.com/keras-team/keras/blob/master/examples/mnist_siamese.py)  
 [3] AVA: A Large-Scale Database for Aesthetic Visual Analysis. [[Refer]](https://www.dpchallenge.com/) [[Repo]](https://github.com/mtobeiyf/ava_downloader)  
-[4] neural-image-assessment. [[Reop]](https://github.com/titu1994/neural-image-assessment)
+[4] neural-image-assessment. [[Repo]](https://github.com/titu1994/neural-image-assessment)
 
 ## 协议
 
