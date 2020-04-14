@@ -389,5 +389,5 @@ class SiameseNIMA():
             'std': self.nima_std_score(results),
             'scores': list(results),
         }
-        results_df = pd.DataFrame(data_dict)
+        results_df = pd.DataFrame(data_dict)[['source', 'mean', 'std', 'scores']]
         return results_df
