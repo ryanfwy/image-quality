@@ -93,19 +93,19 @@ source .env/bin/activate
 若只在 CPU 环境运行，则：
 
 ```bash
-pip3 install numpy==1.15.4 Keras==2.2.4 tensorflow==1.12.0
+pip install numpy==1.15.4 Keras==2.2.4 tensorflow==1.12.0
 ```
 
 若在 GPU 环境运行，则：
 
 ```bash
-pip3 install numpy==1.15.4 Keras==2.2.4 tensorflow-gpu==1.12.0
+pip install numpy==1.15.4 Keras==2.2.4 tensorflow-gpu==1.12.0
 ```
 
 2）剩余部分依赖环境：
 
 ```bash
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ### 4-2. 安装依赖包（懒人版）

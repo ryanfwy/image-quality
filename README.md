@@ -93,19 +93,19 @@ source .env/bin/activate
 For CPU only:
 
 ```bash
-pip3 install numpy==1.15.4 Keras==2.2.4 tensorflow==1.12.0
+pip install numpy==1.15.4 Keras==2.2.4 tensorflow==1.12.0
 ```
 
 For GPU:
 
 ```bash
-pip3 install numpy==1.15.4 Keras==2.2.4 tensorflow-gpu==1.12.0
+pip install numpy==1.15.4 Keras==2.2.4 tensorflow-gpu==1.12.0
 ```
 
 2）The rest of environments:
 
 ```bash
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ### 4-2. Install Dependencies (Quicker Way)
