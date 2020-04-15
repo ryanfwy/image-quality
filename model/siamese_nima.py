@@ -266,6 +266,7 @@ class SiameseNIMA():
               epochs=20,
               batch_size=64,
               optimizer=None,
+              is_callback_checkpoint=True,
               callback=None,
               **kwargs):
         '''Train Siamese NIMA netrowk.
@@ -291,9 +292,12 @@ class SiameseNIMA():
             optimizer (object, optional): the optimizer to train model.
                 If None, `Adam(lr=1e-3)` will be used to train model.
                 Defaults to None.
-            callback (object | list, optional): the callback instance or a list of callback instances.
+            is_callback_checkpoint (bool, optional): whether to callback model checkpoints or not.
+                Defaluts to True.
+            callback (object | list, optional): the additional callback instance(s).
                 See https://keras.io/callbacks/ for more details.
-                Defaults to None, callback model checkpoints ONLY.
+                If not None, the callback instance(s) will be appended.
+                Defaults to None.
             **kwargs:
                 Other keyword arguments to train model.
                 See https://keras.io/models/model/#fit_generator for more details.
@@ -314,12 +318,17 @@ class SiameseNIMA():
         self._model_siamese = self._build_siamese_network(self._model_nima)
 
         # callback
-        checkpoint = LambdaCallback(on_epoch_end=self._checkpoint_on_epoch_end)
-        callbacks = [checkpoint]
+        callbacks = []
+        if is_callback_checkpoint:
+            checkpoint = LambdaCallback(on_epoch_end=self._checkpoint_on_epoch_end)
+            callbacks += [checkpoint]
         if isinstance(callback, list):
             callbacks += callback
         elif callback is not None:
             callbacks += [callback]
+
+        if len(callbacks) == 0:
+            callbacks = None
 
         # train
         optimizer = optimizer or Adam(lr=1e-3)
