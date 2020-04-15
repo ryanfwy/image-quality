@@ -262,6 +262,7 @@ class SiameseNIMA():
               val_raw=None,
               num_classes=10,
               nima_weight_path=None,
+              layer_to_freeze=618,
               epochs=20,
               batch_size=64,
               optimizer=None,
@@ -276,9 +277,13 @@ class SiameseNIMA():
             num_classes (int, optional): the number of classes that dataset have.
                 Defaults to 10.
             nima_weight_path (str, optional): the file path of NIMA network weight.
-                If None, no network weight will be loaded, known as retrain.
+                If None, no network weight will be loaded, known as retraining.
                 Otherwise, NIMA weight will be loaded, known as fine-tuning.
                 Defaults to None.
+            layer_to_freeze (int, optional): the last number of layer to freeze.
+                This will be used when `weight_path` is passed.
+                If None, no layer will be freezed.
+                Defaults to 618.
             epochs (int, optional): the number of epoches to train model.
                 Defaults to 20.
             batch_size (int, optional): the size of a batch to train model.
@@ -304,7 +309,8 @@ class SiameseNIMA():
                                    batch_size=batch_size, num_classes=num_classes)
 
         # define network
-        self._model_nima = self._build_nima_network(weight_path=nima_weight_path)
+        self._model_nima = self._build_nima_network(weight_path=nima_weight_path,
+                                                    layer_to_freeze=layer_to_freeze)
         self._model_siamese = self._build_siamese_network(self._model_nima)
 
         # callback
