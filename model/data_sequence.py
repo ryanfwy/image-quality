@@ -77,11 +77,21 @@ class DataSequence(Sequence):
         batch_x_raw = self.x[idx * self.batch_size:(idx + 1) * self.batch_size]
         batch_y_raw = self.y[idx * self.batch_size:(idx + 1) * self.batch_size]
         batch_x1, batch_x2 = [], []
-        for x1, x2 in batch_x_raw:
-            batch_x1.append(self.__load_image_data(x1))
-            batch_x2.append(self.__load_image_data(x2))
+        batch_y = []
+        for (x1, x2), y in zip(batch_x_raw, batch_y_raw):
+            try:
+                image_x1 = self.__load_image_data(x1)
+                image_x2 = self.__load_image_data(x2)
+                batch_x1.append(image_x1)
+                batch_x2.append(image_x2)
+                batch_y.append(y)
+            except UserWarning as w:
+                pass
+            except Exception as e:
+                pass
+
         batch_x1 = np.array(batch_x1)
         batch_x2 = np.array(batch_x2)
         batch_x = [batch_x1, batch_x2]
-        batch_y = np.array(batch_y_raw)
+        batch_y = np.array(batch_y)
         return batch_x, batch_y
