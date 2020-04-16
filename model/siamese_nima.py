@@ -59,10 +59,9 @@ class SiameseNIMA():
 
     @staticmethod
     def _distance_layer(input_tensors):
-        '''Calculate the l2 distacne of two inputs.'''
+        '''Calculate the L1 distacne of two inputs.'''
         x1, x2 = input_tensors
-        sum_square = K.sum(K.square(x1 - x2), axis=1, keepdims=True)
-        return K.sqrt(K.maximum(sum_square, K.epsilon()))
+        return K.abs(x1 - x2)
 
     @staticmethod
     def _contrastive_loss(y_true, y_pred):
@@ -163,8 +162,10 @@ class SiameseNIMA():
         self._model_nima.save_weights(file_path)
 
     @staticmethod
-    def accuracy(y_true, y_pred, threshold=0.5):
+    def accuracy(y_true, y_pred, threshold=1.0):
         '''Compute classification accuracy with a fixed threshold on distances.
+        If two inputs are the same class, the L1 distance should be lower than 1.0.
+        Otherwise, two inputs are the different, the L1 distance should be higher than 1.0.
 
         Args:
             y_true (np.ndarray): an array of ground truth labels, known as `y`.
