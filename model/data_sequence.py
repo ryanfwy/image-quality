@@ -12,18 +12,16 @@ from keras.preprocessing.image import load_img, img_to_array
 
 
 class DataSequence(Sequence):
-    def __init__(self, x_raw, y_raw, batch_size, num_classes, target_size=(224, 224)):
+    def __init__(self, x_raw, y_raw, batch_size, target_size=(224, 224)):
         '''Create train / validate generator.
 
         Args:
             x_raw (np.ndarray): an array of image paths, not image data.
             y_raw (np.ndarray): an array of image classes.
             batch_size (int): the sample size of each batch.
-            num_classes (int): the number of classes that dataset have.
             target_size (tuple, optional): the size (width, height) of image data. Defaults to (224, 224).
         '''
         self.batch_size = batch_size
-        self.num_classes = num_classes
         self.target_size = target_size
         self.x, self.y = self.__create_pairs(x_raw, y_raw)
 
@@ -42,15 +40,18 @@ class DataSequence(Sequence):
         '''
         pairs = []
         labels = []
-        digit_indices = [np.where(y_raw == i)[0] for i in range(self.num_classes)]
-        n = min([len(digit_indices[d]) for d in range(self.num_classes)]) - 1
-        for d in range(self.num_classes):
-            for i in range(n):
+        classes = np.unique(y_raw) # sorted already
+        digit_indices = [np.where(y_raw == i)[0] for i in classes]
+        for d in classes:
+            classes_neg = classes[classes != d]
+            for i in range(len(digit_indices[d])-1):
+                # positive pair
                 z1, z2 = digit_indices[d][i], digit_indices[d][i + 1]
                 pairs += [[x_raw[z1], x_raw[z2]]]
-                inc = random.randrange(1, self.num_classes)
-                dn = (d + inc) % self.num_classes
-                z1, z2 = digit_indices[d][i], digit_indices[dn][i]
+                # negative pair
+                dn = random.choice(classes_neg)
+                j = random.randrange(len(digit_indices[dn]))
+                z1, z2 = digit_indices[d][i], digit_indices[dn][j]
                 pairs += [[x_raw[z1], x_raw[z2]]]
                 labels += [1, 0]
         return pairs, labels

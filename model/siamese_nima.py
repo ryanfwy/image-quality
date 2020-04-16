@@ -260,7 +260,6 @@ class SiameseNIMA():
     def train(self,
               train_raw,
               val_raw=None,
-              num_classes=10,
               nima_weight_path=None,
               layer_to_freeze=618,
               epochs=20,
@@ -275,8 +274,6 @@ class SiameseNIMA():
             train_raw (tuple): a tuple of train raw data, loaded by `load_data()`.
             val_raw (tuple, optional): a tuple of validate raw data, loaded by `load_data()`.
                 Defaults to None.
-            num_classes (int, optional): the number of classes that dataset have.
-                Defaults to 10.
             nima_weight_path (str, optional): the file path of NIMA network weight.
                 If None, no network weight will be loaded, known as retraining.
                 Otherwise, NIMA weight will be loaded, known as fine-tuning.
@@ -304,13 +301,11 @@ class SiameseNIMA():
         '''
         # load data
         train_x_raw, train_y_raw = train_raw
-        train_gen = DataSequence(train_x_raw, train_y_raw,
-                                 batch_size=batch_size, num_classes=num_classes)
+        train_gen = DataSequence(train_x_raw, train_y_raw, batch_size=batch_size)
         val_gen = None
         if val_raw and len(val_raw) == 2:
             val_x_raw, val_y_raw = val_raw
-            val_gen = DataSequence(val_x_raw, val_y_raw,
-                                   batch_size=batch_size, num_classes=num_classes)
+            val_gen = DataSequence(val_x_raw, val_y_raw, batch_size=batch_size)
 
         # define network
         self._model_nima = self._build_nima_network(weight_path=nima_weight_path,
