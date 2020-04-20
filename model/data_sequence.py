@@ -8,22 +8,35 @@ import numpy as np
 
 from keras.utils import Sequence
 from keras.applications.inception_resnet_v2 import preprocess_input
-from keras.preprocessing.image import load_img, img_to_array
+from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 
 
 class DataSequence(Sequence):
-    def __init__(self, x_raw, y_raw, batch_size, target_size=(224, 224)):
+    def __init__(self,
+                 x_raw,
+                 y_raw,
+                 batch_size,
+                 target_size=(224, 224),
+                 augmentation_args=None):
         '''Create train / validate generator.
 
         Args:
             x_raw (np.ndarray): an array of image paths, not image data.
             y_raw (np.ndarray): an array of image classes.
             batch_size (int): the sample size of each batch.
-            target_size (tuple, optional): the size (width, height) of image data. Defaults to (224, 224).
+            target_size (tuple, optional): the size (width, height) of image data.
+                Defaults to (224, 224).
+            augmentation_args (dict, optional): a dict of augmentation arguments.
+                See https://keras.io/preprocessing/image/#imagedatagenerator-class for more details.
+                Defaults to None, augmentation will be deactivate.
         '''
         self.batch_size = batch_size
         self.target_size = target_size
         self.x, self.y = self.__create_pairs(x_raw, y_raw)
+
+        self.data_gen = None
+        if augmentation_args:
+            self.data_gen = ImageDataGenerator(**augmentation_args)
 
     def __create_pairs(self, x_raw, y_raw):
         '''Create positive and negative pairs.
@@ -92,6 +105,12 @@ class DataSequence(Sequence):
 
         batch_x1 = np.array(batch_x1)
         batch_x2 = np.array(batch_x2)
+
+        # augmentation
+        if self.data_gen:
+            batch_x1 = self.data_gen.flow(batch_x1, batch_size=self.batch_size).next()
+            batch_x2 = self.data_gen.flow(batch_x2, batch_size=self.batch_size).next()
+
         batch_x = [batch_x1, batch_x2]
         batch_y = np.array(batch_y)
         return batch_x, batch_y

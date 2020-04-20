@@ -267,6 +267,7 @@ class SiameseNIMA():
               optimizer=None,
               is_callback_checkpoint=True,
               callback=None,
+              augmentation_args=None,
               **kwargs):
         '''Train Siamese NIMA netrowk.
 
@@ -295,13 +296,19 @@ class SiameseNIMA():
                 See https://keras.io/callbacks/ for more details.
                 If not None, the callback instance(s) will be appended.
                 Defaults to None.
+            augmentation_args (dict, optional): a dict of augmentation arguments.
+                See https://keras.io/preprocessing/image/#imagedatagenerator-class for more details.
+                Defaults to None, augmentation will be deactivate.
             **kwargs:
                 Other keyword arguments to train model.
                 See https://keras.io/models/model/#fit_generator for more details.
         '''
         # load data
         train_x_raw, train_y_raw = train_raw
-        train_gen = DataSequence(train_x_raw, train_y_raw, batch_size=batch_size)
+        train_gen = DataSequence(train_x_raw, train_y_raw,
+                                 batch_size=batch_size,
+                                 augmentation_args=augmentation_args)
+
         val_gen = None
         if val_raw and len(val_raw) == 2:
             val_x_raw, val_y_raw = val_raw
