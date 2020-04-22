@@ -30,13 +30,18 @@ class DataSequence(Sequence):
                 See https://keras.io/preprocessing/image/#imagedatagenerator-class for more details.
                 Defaults to None, augmentation will be deactivate.
         '''
+        self.x_raw = x_raw
+        self.y_raw = y_raw
         self.batch_size = batch_size
         self.target_size = target_size
-        self.x, self.y = self.__create_pairs(x_raw, y_raw)
 
         self.data_gen = None
         if augmentation_args:
             self.data_gen = ImageDataGenerator(**augmentation_args)
+
+        # initialize `self.x` and `self.y`
+        self.x, self.y = None, None
+        self.on_epoch_end()
 
     def __create_pairs(self, x_raw, y_raw):
         '''Create positive and negative pairs.
@@ -114,3 +119,7 @@ class DataSequence(Sequence):
         batch_x = [batch_x1, batch_x2]
         batch_y = np.array(batch_y)
         return batch_x, batch_y
+
+    def on_epoch_end(self):
+        '''Re-create pairs at the end of every eposh.'''
+        self.x, self.y = self.__create_pairs(self.x_raw, self.y_raw)
